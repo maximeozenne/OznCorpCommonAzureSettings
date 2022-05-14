@@ -1,0 +1,60 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+- feature/*
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: gitversion/setup@0
+  inputs:
+    versionSpec: '5.x'
+
+- task: gitversion/execute@0
+  inputs:
+    updateAssemblyInfo: true
+    useConfigFile: true
+    configFilePath: './gitversion.yml'
+
+- task: NuGetCommand@2
+  displayName: Restoring packages using private feed
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
+    vstsFeed: 'c0d8e3a4-03ca-4697-b4b6-f8b328a87451'
+    includeNuGetOrg: false
+    noCache: true
+
+#- task: DotNetCoreCLI@2
+#  inputs:
+#    command: 'test'
+#    projects: '**/*Tests.csproj'
+
+- script: dotnet build --configuration $(buildConfiguration) /p:AssemblyVersion=$(GitVersion.AssemblySemVer)
+  displayName: Build
+
+- task: NuGetCommand@2
+  displayName: Packaging the build into a nuget package
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/*.csproj'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'GitVersion.FullSemVer'
+
+- task: NuGetCommand@2
+  displayName: Pushing package to the private feed
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'c0d8e3a4-03ca-4697-b4b6-f8b328a87451'
+    allowPackageConflicts: true
