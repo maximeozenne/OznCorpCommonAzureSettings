@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "subscriptionId": {
-            "value": ""
+            "value": "null"
         },
         "name": {
-            "value": ""
+            "value": "null"
         },
         "location": {
-            "value": "France Central"
+            "value": "null"
         },
         "hostingPlanName": {
             "value": "ASP-Development-89da"
