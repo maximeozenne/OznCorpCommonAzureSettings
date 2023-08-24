@@ -40,6 +40,9 @@
         },
         "linuxFxVersion": {
             "type": "string"
+        },
+        "workspace": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -121,14 +124,14 @@
                 "Request_Source": "IbizaWebAppExtensionCreate",
                 "Flow_Type": "Redfield",
                 "Application_Type": "web",
-                "WorkspaceResourceId": "/subscriptions/ddba26c4-9844-4617-a52d-89aceabb881f/resourceGroups/DefaultResourceGroup-WEU/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-ddba26c4-9844-4617-a52d-89aceabb881f-WEU"
+                "WorkspaceResourceId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.OperationalInsights/workspaces', parameters('workspace'))]"
             }
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "newWorkspaceTemplate",
-            "resourceGroup": "DefaultResourceGroup-WEU",
+            "resourceGroup": "[parameters('serverFarmResourceGroup')]",
             "subscriptionId": "[parameters('subscriptionId')]",
             "properties": {
                 "mode": "Incremental",
@@ -140,9 +143,9 @@
                     "resources": [
                         {
                             "apiVersion": "2020-08-01",
-                            "name": "DefaultWorkspace-ddba26c4-9844-4617-a52d-89aceabb881f-WEU",
+                            "name": "[parameters('workspace')]",
                             "type": "Microsoft.OperationalInsights/workspaces",
-                            "location": "westeurope",
+                            "location": "francecentral",
                             "properties": {}
                         }
                     ]
