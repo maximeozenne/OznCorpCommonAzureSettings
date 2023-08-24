@@ -8,9 +8,15 @@
         "name": {
             "type": "string"
         },
+        "lowerName": {
+            "type": "string"
+        }
         "location": {
             "type": "string"
         },
+        "lowerLocation": {
+            "type": "string"
+        }
         "hostingPlanName": {
             "type": "string"
         },
