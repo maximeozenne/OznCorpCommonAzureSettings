@@ -40,6 +40,9 @@
         },
         "linuxFxVersion": {
             "value": "DOTNETCORE|7.0"
+        },
+        "workspace": {
+            "value": "null"
         }
     }
 }
