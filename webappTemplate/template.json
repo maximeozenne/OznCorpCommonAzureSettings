@@ -60,7 +60,7 @@
             "location": "[parameters('location')]",
             "tags": {},
             "dependsOn": [
-                "microsoft.insights/components/ozncorp-identityprovider",
+                "[concat('microsoft.insights/components/', parameters('lowerName'))]",
                 "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
             ],
             "properties": {
@@ -118,9 +118,9 @@
         },
         {
             "apiVersion": "2020-02-02-preview",
-            "name": "ozncorp-identityprovider",
+            "name": "[parameters('lowerName')]",
             "type": "microsoft.insights/components",
-            "location": "westeurope",
+            "location": "[parameters('lowerLocation')]",
             "tags": {},
             "dependsOn": [
                 "newWorkspaceTemplate"
@@ -151,7 +151,7 @@
                             "apiVersion": "2020-08-01",
                             "name": "[parameters('workspace')]",
                             "type": "Microsoft.OperationalInsights/workspaces",
-                            "location": "francecentral",
+                            "location": "[parameters('lowerLocation')]",
                             "properties": {}
                         }
                     ]
